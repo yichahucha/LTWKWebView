@@ -3,11 +3,11 @@
 //  LTWebView
 //
 //  Created by xlitao on 2017/5/18.
-//  Copyright © 2017年 eloancn. All rights reserved.
+//  Copyright © 2017年 me. All rights reserved.
 //
 
-#import "ELWKWebViewController.h"
+#import "LTWKWebViewController.h"
 
-@interface TestViewController : ELWKWebViewController
+@interface TestViewController : LTWKWebViewController
 
 @end

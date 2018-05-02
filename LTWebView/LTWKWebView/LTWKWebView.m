@@ -1,23 +1,36 @@
 //
-//  ELWebView.m
-//  ELWebView
+//  LTWebView.m
+//  LTWebView
 //
 //  Created by xlitao on 2017/5/18.
-//  Copyright © 2017年 eloancn. All rights reserved.
+//  Copyright © 2017年 me. All rights reserved.
 //
 
-#import "ELWKWebView.h"
+#import "LTWKWebView.h"
 
-#ifdef DEBUG
-#   define BASE_URL_API    @"http://****/"   //测试环境
-#else
-#   define BASE_URL_API    @"http://****/"   //正式环境
-#endif
+#define POST_JS @"function my_post(path, params) {\
+var method = \"POST\";\
+var form = document.createElement(\"form\");\
+form.setAttribute(\"method\", method);\
+form.setAttribute(\"action\", path);\
+for(var key in params){\
+if (params.hasOwnProperty(key)) {\
+var hiddenFild = document.createElement(\"input\");\
+hiddenFild.setAttribute(\"type\", \"hidden\");\
+hiddenFild.setAttribute(\"name\", key);\
+hiddenFild.setAttribute(\"value\", params[key]);\
+}\
+form.appendChild(hiddenFild);\
+}\
+document.body.appendChild(form);\
+form.submit();\
+}"
 
-@interface ELWKWebView ()
+@interface LTWKWebView ()   <WKScriptMessageHandler>
 @property (nonatomic ,strong) NSURLRequest *URLRequest;
 @end
-@implementation ELWKWebView
+
+@implementation LTWKWebView
 
 - (void)reloadWebView {
     [self loadRequest:_URLRequest];
@@ -35,14 +48,9 @@
 }
 
 - (void)loadPOSTRequestWithUrl:(NSString *)url params:(NSDictionary *)params {
-    NSURL *URL = [self dealRelativeUrl:url];
-    NSString *body = [self dealParams:params];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
-    [request setHTTPMethod: @"POST"];
-    [request setHTTPBody: [body dataUsingEncoding: NSUTF8StringEncoding]];
-    request.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-    _URLRequest = request;
-    [self loadRequest:_URLRequest];
+    NSString *body = [self dictionaryToJson:params];
+    NSString * js= [NSString stringWithFormat:@"%@my_post(\"%@\", %@)",POST_JS,url,body];
+    [self evaluateJavaScript:js completionHandler:nil];
 }
 
 - (void)loadLocalHTMLWithFileName:(nonnull NSString *)htmlName {
@@ -68,6 +76,16 @@
             handler(response);
         }
     }];
+}
+
+- (void)addScriptMessage:(NSString *_Nonnull)name {
+    [self.configuration.userContentController addScriptMessageHandler:self name:name];
+}
+
+-(void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+    if (_messageHandlerDelegate && [_messageHandlerDelegate respondsToSelector:@selector(webView:didReceivedScriptMessage:)]) {
+        [self.messageHandlerDelegate webView:self didReceivedScriptMessage:message];
+    }
 }
 
 - (NSURL *)generateUrl:(NSString*)baseURL params:(NSDictionary*)params {
@@ -111,7 +129,14 @@
     }
     //相对路径
     else {
-        return [NSURL URLWithString:url relativeToURL:[NSURL URLWithString:BASE_URL_API]];
+        return [NSURL URLWithString:url relativeToURL:[NSURL URLWithString:@""]];
     }
 }
+
+- (NSString *)dictionaryToJson:(NSDictionary *)dic {
+    NSError *parseError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&parseError];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
+
 @end

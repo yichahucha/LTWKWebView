@@ -3,7 +3,7 @@
 //  LTWebView
 //
 //  Created by xlitao on 2017/5/18.
-//  Copyright © 2017年 eloancn. All rights reserved.
+//  Copyright © 2017年 me. All rights reserved.
 //
 
 #import "TestViewController.h"
@@ -14,30 +14,28 @@
 
 @implementation TestViewController
 
--(void)dealloc
-{
-    
-}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    //加载测试HTML
     [self.webView loadLocalHTMLWithFileName:@"test"];
-    //添加监听方法名
-    [self.webView addScriptMessage:@"test"];
-    [self.webView addScriptMessage:@"test2"];
+    //添加监听方法（js调用oc方法）
+    [self.webView addScriptMessage:@"calloc"];
 }
 
--(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
-{
+-(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     [super webView:webView didFinishNavigation:navigation];
+    
+    //调用js的方法(test.js里边的方法 "calljs()")，需等到webview加载完成
+    [self.webView callJS:@"calljs('js方法被调用')"];
 }
 
--(void)webView:(ELWKWebView *)webview didReceivedScriptMessage:(WKScriptMessage *)message {
-    if ([message.name isEqualToString:@"test"]) {
-        //NSString *method = [NSString stringWithFormat:@"callJs('%@')",message.body];
-        //[self.webView callJS:method handler:^(id  _Nullable response) {}];
-    }else if ([message.name isEqualToString:@"test2"]) {
-        
+-(void)webView:(LTWKWebView *)webview didReceivedScriptMessage:(WKScriptMessage *)message {
+    if ([message.name isEqualToString:@"calloc"]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message.body preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:cancel];
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 @end

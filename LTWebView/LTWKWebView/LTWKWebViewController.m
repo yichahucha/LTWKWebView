@@ -3,12 +3,12 @@
 //  LTWebView
 //
 //  Created by xlitao on 2017/5/18.
-//  Copyright © 2017年 eloancn. All rights reserved.
+//  Copyright © 2017年 me. All rights reserved.
 //
 
-#import "ELWKWebViewController.h"
+#import "LTWKWebViewController.h"
 
-@interface ELWKWebViewController () <WKUIDelegate ,UIGestureRecognizerDelegate>
+@interface LTWKWebViewController () <WKUIDelegate ,UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *backBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *closeBarButtonItem;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation ELWKWebViewController
+@implementation LTWKWebViewController
 
 - (void)dealloc {
     [self.webView removeObserver:self forKeyPath:@"title"];
@@ -44,11 +44,7 @@
         }else {
             [self.webView loadRequestWithUrl:self.url];
         }
-    }else {
-        //异常处理
     }
-    
-    //[self.webView addScriptMessage:@""];
 }
 
 #pragma mark --手势失效
@@ -79,19 +75,30 @@
 
 #pragma mark --属性监听
 - (void)setUpPropertyKVO {
-    //监听标题
-    [self.webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
+    
+    //标题
+    if (self.webTitle.length > 0) {
+        self.title = self.webTitle;
+    }else {
+        [self.webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
+    }
+   
     //进度
     [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
+    //返回
+    [self.webView addObserver:self forKeyPath:@"canGoBack" options:NSKeyValueObservingOptionNew context:nil];
+
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:@"title"]) {
-        if (self.webTitle.length == 0) {
-            self.title = self.webView.title;
-        }
-    }else if ([keyPath isEqualToString:@"estimatedProgress"]) {
+        self.title = self.webView.title;
+    }
+    if ([keyPath isEqualToString:@"estimatedProgress"]) {
         [self progressChanged:change[NSKeyValueChangeNewKey]];
+    }
+    if ([keyPath isEqualToString:@"canGoBack"]) {
+        [self showLeftBarButtonItem];
     }
 }
 
@@ -102,7 +109,6 @@
 
 - (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation {
     NSLog(@"%s", __FUNCTION__);
-    [self showLeftBarButtonItem];
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
@@ -125,6 +131,18 @@
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     NSLog(@"%s", __FUNCTION__);
     NSLog(@"URL: %@", navigationAction.request.URL.absoluteString);
+    NSURL *URL = navigationAction.request.URL;
+    
+    NSString *scheme = [URL scheme];
+    if ([scheme isEqualToString:@"tel"]) {
+        NSString *resourceSpecifier = [URL resourceSpecifier];
+        NSString *callPhone = [NSString stringWithFormat:@"telprompt://%@", resourceSpecifier];
+        //防止iOS 10及其之后，拨打电话系统弹出框延迟出现
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:callPhone]];
+        });
+    }
+    
     decisionHandler(WKNavigationActionPolicyAllow);
 }
 
@@ -142,11 +160,12 @@
     }
 }
 #pragma mark --ELWKWebViewMessageHandlerDelegate
--(void)webView:(ELWKWebView *)webview didReceivedScriptMessage:(WKScriptMessage *)message {
-    //message.name判断可以知道监听的是JS的哪个方法
-    //message.body就是JS传过来的参数，可以是字符串，可以是数组，也可以是字典
-    //js开发人员必须这样实现 window.webkit.messageHandlers. Share.postMessage(null) "Share"为方法名
-    //if ([message.name isEqualToString:@"openPage"]) {}
+-(void)webView:(LTWKWebView *)webview didReceivedScriptMessage:(WKScriptMessage *)message {
+    /*
+     message.name判断可以知道监听的是JS的哪个方法
+     message.body就是JS传过来的参数，可以是字符串，可以是数组，也可以是字典
+     js开发人员必须这样实现 window.webkit.messageHandlers. Share.postMessage(null) "Share"为方法名
+     */
 }
 #pragma mark - WKUIDelegate
 
@@ -176,10 +195,10 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(ELWKWebView *)webView {
+-(LTWKWebView *)webView {
     if (!_webView) {
         WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
-        _webView = [[ELWKWebView alloc] initWithFrame:self.view.bounds configuration:config];
+        _webView = [[LTWKWebView alloc] initWithFrame:self.view.bounds configuration:config];
         _webView.navigationDelegate = self;
         _webView.UIDelegate = self;
         _webView.messageHandlerDelegate = self;
@@ -265,7 +284,4 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
 @end

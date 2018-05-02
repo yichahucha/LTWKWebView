@@ -3,20 +3,20 @@
 //  LTWebView
 //
 //  Created by xlitao on 2017/5/18.
-//  Copyright © 2017年 eloancn. All rights reserved.
+//  Copyright © 2017年 me. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
-@class ELWKWebView;
+@class LTWKWebView;
 
 @protocol ELWKWebViewMessageHandlerDelegate <NSObject>
--(void)webView:(ELWKWebView *_Nonnull)webview didReceivedScriptMessage:(WKScriptMessage *_Nullable)message;
+-(void)webView:(LTWKWebView *_Nonnull)webview didReceivedScriptMessage:(WKScriptMessage *_Nullable)message;
 
 @end
 
-@interface ELWKWebView : WKWebView
+@interface LTWKWebView : WKWebView
 
 @property (nonatomic ,weak) _Nullable id <ELWKWebViewMessageHandlerDelegate>messageHandlerDelegate;
 
