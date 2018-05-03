@@ -5,7 +5,7 @@
 2.自定义 WebviewController，支持进度条显示，返回关闭按钮，标题监听，使用简单
 
 ## 使用
-具体详见demo...
+具体详见 demo...
 
 ## 演示
 ![](https://raw.githubusercontent.com/yichahucha/LTWKWebView/master/2018-05-03%2011_11_49.gif)
