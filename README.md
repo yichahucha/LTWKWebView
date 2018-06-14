@@ -6,9 +6,9 @@
 
 ## 使用
 
-Carthage 安装 `github "yichahucha/LTWKWebView"`
+1.Carthage 安装 `github "yichahucha/LTWKWebView"`
 
-具体详见 demo...
+2.源代码直接拖入工程
 
 ## 演示
 ![](https://raw.githubusercontent.com/yichahucha/LTWKWebView/master/2018-05-03%2011_11_49.gif)
