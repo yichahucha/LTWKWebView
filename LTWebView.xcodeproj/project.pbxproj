@@ -10,8 +10,6 @@
 		0FD8EC4D2099B5330092BC74 /* icon_back-whitebackground(22x22)@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FD8EC4C2099B5330092BC74 /* icon_back-whitebackground(22x22)@3x.png */; };
 		0FD8EC4F2099B5390092BC74 /* icon_back-whitebackground(22x22)@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FD8EC4E2099B5390092BC74 /* icon_back-whitebackground(22x22)@2x.png */; };
 		0FD8EC512099B8550092BC74 /* test.css in Resources */ = {isa = PBXBuildFile; fileRef = 0FD8EC502099B8550092BC74 /* test.css */; };
-		0FDFA4A920D259D500AE099C /* LTWKWebView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FDFA4A220D259D500AE099C /* LTWKWebView.framework */; };
-		0FDFA4AA20D259D500AE099C /* LTWKWebView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FDFA4A220D259D500AE099C /* LTWKWebView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0FDFA4AE20D259E100AE099C /* LTWKWebView.h in Sources */ = {isa = PBXBuildFile; fileRef = C31763CC1ECDAC95004F72A4 /* LTWKWebView.h */; };
 		0FDFA4AF20D259E100AE099C /* LTWKWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C31763CD1ECDAC95004F72A4 /* LTWKWebView.m */; };
 		0FDFA4B020D259E100AE099C /* LTWKWebViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = C31763CE1ECDAC95004F72A4 /* LTWKWebViewController.h */; };
@@ -33,13 +31,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0FDFA4A720D259D500AE099C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C31763681ECD4DCE004F72A4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0FDFA4A120D259D500AE099C;
-			remoteInfo = LTWKWebView;
-		};
 		C317638A1ECD4DCF004F72A4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C31763681ECD4DCE004F72A4 /* Project object */;
@@ -55,20 +46,6 @@
 			remoteInfo = ELWebView;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		C31763C31ECD7F33004F72A4 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				0FDFA4AA20D259D500AE099C /* LTWKWebView.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0FD8EC4C2099B5330092BC74 /* icon_back-whitebackground(22x22)@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_back-whitebackground(22x22)@3x.png"; sourceTree = "<group>"; };
@@ -114,7 +91,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FDFA4A920D259D500AE099C /* LTWKWebView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,12 +250,10 @@
 				C317636C1ECD4DCE004F72A4 /* Sources */,
 				C317636D1ECD4DCE004F72A4 /* Frameworks */,
 				C317636E1ECD4DCE004F72A4 /* Resources */,
-				C31763C31ECD7F33004F72A4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0FDFA4A820D259D500AE099C /* PBXTargetDependency */,
 			);
 			name = LTWebView;
 			productName = ELWebView;
@@ -454,11 +428,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0FDFA4A820D259D500AE099C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0FDFA4A120D259D500AE099C /* LTWKWebView */;
-			targetProxy = 0FDFA4A720D259D500AE099C /* PBXContainerItemProxy */;
-		};
 		C317638B1ECD4DCF004F72A4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C317636F1ECD4DCE004F72A4 /* LTWebView */;

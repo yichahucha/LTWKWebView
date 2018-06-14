@@ -5,6 +5,9 @@
 2.自定义 WebviewController，支持进度条显示，返回关闭按钮，标题监听，使用简单
 
 ## 使用
+
+Carthage 安装 `github "yichahucha/LTWKWebView"`
+
 具体详见 demo...
 
 ## 演示

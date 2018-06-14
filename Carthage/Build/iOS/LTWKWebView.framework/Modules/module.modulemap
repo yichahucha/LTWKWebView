@@ -1,6 +1,0 @@
-framework module LTWKWebView {
-  umbrella header "LTWKWebView.h"
-
-  export *
-  module * { export * }
-}
