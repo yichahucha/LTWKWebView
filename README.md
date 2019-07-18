@@ -10,6 +10,3 @@
 
 2.源代码直接拖入工程
 
-## 演示
-![](https://raw.githubusercontent.com/yichahucha/LTWKWebView/master/2018-05-03%2011_11_49.gif)
-
