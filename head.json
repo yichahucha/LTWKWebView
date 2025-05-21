@@ -44,19 +44,19 @@
     ],
     "rules": [
     {
-      "outbound": ["any"],
+      "outbound": "any",
       "server": "dns_resolver"
     }, {
-      "geosite": ["cn"],
+      "geosite": "cn",
 	  "query_type": [ "A", "AAAA" ],
       "server": "dns_direct"
 	}, {
-      "geosite": ["geolocation-!cn"],
+      "geosite": "geolocation-!cn",
 	  "query_type": [ "A", "AAAA" ],
       "server": "dns_fakeip"
     },
     { 
-      "rule-set": [ "geosite-cn" ],
+      "rule-set": "geosite-cn" ,
       "query_type": [ "A", "AAAA" ],
       "server": "dns_direct"
     }
@@ -76,3 +76,4 @@
  ]
  ,
 // }
+
