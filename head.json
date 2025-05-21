@@ -1,0 +1,78 @@
+// {
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "0.0.0.0:9999",
+      "external_ui": "ui",
+      "secret": "",
+      "default_mode": "Rule"
+    },
+    "cache_file": {
+      "enabled": true,
+      "path": "",
+      "cache_id": "",
+      "store_fakeip": false
+    }
+  },
+  "dns": { 
+    "servers": [
+    {
+      "tag": "dns_proxy",
+      "address": "tls://1.0.0.1:853",
+      "strategy": "prefer_ipv4",
+      "address_resolver": "dns_resolver"
+    }, {
+      "tag": "dns_direct",
+      "address": "https://223.5.5.5/dns-query",
+      "strategy": "prefer_ipv4",
+      "address_resolver": "dns_resolver",
+      "detour": "DIRECT"
+    }, {
+      "tag": "dns_fakeip",
+      "address": "fakeip"
+    }, {
+      "tag": "dns_resolver",
+      "address": "223.5.5.5",
+      "detour": "DIRECT"
+    }, {
+      "tag": "block",
+      "address": "rcode://success"
+    }
+    ],
+    "rules": [
+    {
+      "outbound": ["any"],
+      "server": "dns_resolver"
+    }, {
+      "geosite": ["cn"],
+	  "query_type": [ "A", "AAAA" ],
+      "server": "dns_direct"
+	}, {
+      "geosite": ["geolocation-!cn"],
+	  "query_type": [ "A", "AAAA" ],
+      "server": "dns_fakeip"
+    },
+    { 
+      "rule-set": [ "geosite-cn" ],
+      "query_type": [ "A", "AAAA" ],
+      "server": "dns_direct"
+    }
+    ],
+    "final": "dns_direct",
+    "independent_cache": true,
+    "reverse_mapping": true,
+    "fakeip": { "enabled": true, "inet4_range": "198.18.0.0/16", "inet6_range": "fc00::/16" }
+  },
+  "inbounds": [
+   {
+     "type": "tproxy",
+     "tag": "tproxy-in",
+     "listen": "0.0.0.0",
+     "listen_port": 7895
+   }
+ ]
+// }
+
